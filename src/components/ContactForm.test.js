@@ -23,8 +23,10 @@ test('renders the contact form header', ()=> {
 
 test('renders ONE error message if user enters less then 5 characters into firstname.', async () => {
     render (<ContactForm/>)
-    const fname = screen.getByPlaceholderText('Edd');
-    userEvent.type()
+    const firstname = screen.getByPlaceholderText('Edd');
+    userEvent.type(firstname, 'Nit');
+    const fnameerror = screen.findByText('firstname must have atleast 5 characters');
+    expect(fnameerror).toBeTruthy();
     
 });
 
