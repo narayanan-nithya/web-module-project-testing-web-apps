@@ -31,6 +31,18 @@ test('renders ONE error message if user enters less then 5 characters into first
 });
 
 test('renders THREE error messages if user enters no values into any fields.', async () => {
+    render (<ContactForm/>)
+    const subButton = screen.getByRole('button');
+    userEvent.click(subButton);
+    
+    const fnameerror = screen.findByText('firstname must have atleast 5 characters');
+    expect(fnameerror).toBeTruthy();
+
+    const lnameerror = screen.findByText('lastname is required');
+    expect(lnameerror).toBeTruthy();
+
+    const emailerror = screen.findByText('email must be a valid email address');
+    expect(emailerror).toBeTruthy();
     
 });
 
