@@ -4,6 +4,7 @@ import {render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ContactForm from './ContactForm';
+import { scryRenderedDOMComponentsWithClass } from 'react-dom/test-utils';
 
 test('renders without errors', ()=>{
 
@@ -103,6 +104,32 @@ test('renders "lastName is a required field" if an last name is not entered and 
 
 test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
     
+    render (<ContactForm/>)
+
+    const firstName = screen.getByPlaceholderText('Edd');
+    userEvent.type(firstName, 'Nithya');  
+
+    const lnameError = screen.findByText('lastName is required.');
+    expect(lnameError).toBeTruthy();
+
+    const emailAddress = screen.getByPlaceholderText('bluebill1049@hotmail.com')
+    userEvent.type(emailAddress, 'abcxyz@test.com')
+
+    const submitButton = screen.getByRole('button');
+    userEvent.click(submitButton);
+
+    const firstNameRender = await screen.getByTestId('firstnameDisplay');
+    expect(firstNameRender).toBeTruthy();
+
+    const lastNameRender = await screen.getByTestId('lastnameDisplay');
+    expect(lastNameRender).toBeTruthy();
+
+    const emailRender = await screen.getByTestId('emailDisplay');
+    expect(emailRender).toBeTruthy();
+
+    const msgRender = await screen.getByTestId('messageDisplay');
+    expect(msgRender).toBeFalsy();
+
 });
 
 test('renders all fields text when all fields are submitted.', async () => {
