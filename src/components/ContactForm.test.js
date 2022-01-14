@@ -14,7 +14,9 @@ test('renders without errors', ()=>{
 });
 
 test('renders the contact form header', ()=> {
+    
     render (<ContactForm/>)
+
     const header = screen.getByText(/ContactForm/i)
     expect(header).toBeTruthy();
     expect(header).toHaveTextContent(/ContactForm/i)
@@ -23,9 +25,12 @@ test('renders the contact form header', ()=> {
 });
 
 test('renders ONE error message if user enters less then 5 characters into firstname.', async () => {
+    
     render (<ContactForm/>)
+
     const firstName = screen.getByPlaceholderText('Edd');
     userEvent.type(firstName, 'Nit');
+
     const fnameError = screen.findByText('firstname must have atleast 5 characters');
     expect(fnameError).toBeTruthy();
     
@@ -133,4 +138,31 @@ test('renders all firstName, lastName and email text when submitted. Does NOT re
 });
 
 test('renders all fields text when all fields are submitted.', async () => {
+
+    render (<ContactForm/>)
+
+    const firstName = screen.getByPlaceholderText('Edd');
+    userEvent.type(firstName, 'Nithya');  
+
+    const lnameError = screen.findByText('lastName is required.');
+    expect(lnameError).toBeTruthy();
+
+    const emailAddress = screen.getByPlaceholderText('bluebill1049@hotmail.com')
+    userEvent.type(emailAddress, 'abcxyz@test.com')
+
+    const submitButton = screen.getByRole('button');
+    userEvent.click(submitButton);
+
+    const firstNameRender = await screen.getByTestId('firstnameDisplay');
+    expect(firstNameRender).toBeTruthy();
+
+    const lastNameRender = await screen.getByTestId('lastnameDisplay');
+    expect(lastNameRender).toBeTruthy();
+
+    const emailRender = await screen.getByTestId('emailDisplay');
+    expect(emailRender).toBeTruthy();
+
+    const msgRender = await screen.getByTestId('messageDisplay');
+    expect(msgRender).toBeTruthy();
+
 });
